@@ -18,12 +18,12 @@ public class CMMCollisionExpandMod {
 
         // Use NeoForge to bootstrap the Common mod.
         Constants.LOG.info("Hello NeoForge world!");
-        CommonClass.init();
+        CMMCEMod.init();
 
         if (ModList.get().isLoaded(Constants.YACL_MOD_ID)) {
             ModLoadingContext.get().registerExtensionPoint(
                     IConfigScreenFactory.class,
-                    () -> (client, parent) -> CMMCEConfig.build(parent)
+                    () -> (client, parent) -> CMMCEConfigScreen.build(parent)
             );
         }
     }

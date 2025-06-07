@@ -2,8 +2,7 @@
   "options.cmmce.general": "一般設定",
   "options.cmmce.filter_settings": "フィルタ設定",
   "options.cmmce.filtering_mode.name": "フィルタ方式",
-  "options.cmmce.filtering_mode.description":
-    "フィルターリストをどのように適用するか設定できます。\nCMMCE自体の有効・無効もここで切り替えられます。",
+  "options.cmmce.filtering_mode.description": "フィルターリストをどのように適用するか設定できます。\nCMMCE自体の有効・無効もここで切り替えられます。",
   "options.cmmce.filtering_mode.template": "「%s」\n%s\n",
   "options.cmmce.filtering_mode.disabled": "フィルタに関係なく無効",
   "options.cmmce.filtering_mode.disabled.description": "CMMCEを無効にします。",
@@ -14,8 +13,19 @@
   "options.cmmce.filtering_mode.enabled": "フィルタに関係なく有効",
   "options.cmmce.filtering_mode.enabled.description": "フィルターリストを変更することなくすべてのMobに対して有効化できます。",
   "options.cmmce.filter_list.name": "フィルターリスト",
-  "options.cmmce.filter_list.description": "上のフィルタ方式の設定を忘れずに！",
+  "options.cmmce.filter_list.description": "上のフィルタ方式を忘れずに設定してください！",
   "options.cmmce.debug_settings": "デバッグ設定",
   "options.cmmce.debug_box_render.name": "当たり判定のデバッグを有効化",
-  "options.cmmce.debug_box_render.description": "F3+Bでの当たり判定に、このModで拡張された当たり判定を表示します。"
+  "options.cmmce.debug_box_render.description": "F3+Bでの当たり判定に、このModで拡張された当たり判定を表示します。",
+  "options.cmmce.about": "CMMCEについて",
+  "options.cmmce.about.line0": "%sのモデルが当たり判定と視覚的に一致するように、右クリック時や攻撃時に使用される判定のサイズを拡大します。",
+  "options.cmmce.about.line0.cmmrp": "CMMRP",
+  "options.cmmce.about.line1": "CMMCEのソースコードは%sにあります。",
+  "options.cmmce.about.line1.github": "GitHub",
+  "options.cmmce.about.credits": "クレジット",
+  "options.cmmce.about.cmmrp": "Cute Mob Models Resource Pack",
+  "options.cmmce.about.yacl": "YetAnotherConfigLib",
+
+  "modmenu.descriptionTranslation.cmmce": "CMMRPのモデルが当たり判定と視覚的に一致するように、右クリック時や攻撃時に使用される判定のサイズを拡大します。",
+  "modmenu.summaryTranslation.cmmce": "CMMRPのモデルと一致するように当たり判定のサイズを拡大します。"
 }

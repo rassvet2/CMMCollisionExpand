@@ -16,5 +16,16 @@
   "options.cmmce.filter_list.description": "Don't forget to set the filter method above to enable this!",
   "options.cmmce.debug_settings": "Debug Settings",
   "options.cmmce.debug_box_render.name": "Enable Collision Box Debugging",
-  "options.cmmce.debug_box_render.description": "The collision box display with F3+B will show the collision box expanded by CMMCE."
+  "options.cmmce.debug_box_render.description": "The collision box display with F3+B will show the collision box expanded by CMMCE.",
+  "options.cmmce.about": "About CMMCE",
+  "options.cmmce.about.line0": "Increase the size of the collision box used on interactions such as right-click and attack so that the box size visually matches to the %s models.",
+  "options.cmmce.about.line0.cmmrp": "CMMRP",
+  "options.cmmce.about.line1": "Source code is available at %s.",
+  "options.cmmce.about.line1.github": "GitHub",
+  "options.cmmce.about.credits": "Credits",
+  "options.cmmce.about.cmmrp": "Cute Mob Models Resource Pack",
+  "options.cmmce.about.yacl": "YetAnotherConfigLib",
+
+  "modmenu.descriptionTranslation.cmmce": "Increase the size of the collision box used on interactions such as right-click and attack so that the box size visually matches to the CMMRP models.",
+  "modmenu.summaryTranslation.cmmce": "Increase collision box size to match the CMMRP models."
 }

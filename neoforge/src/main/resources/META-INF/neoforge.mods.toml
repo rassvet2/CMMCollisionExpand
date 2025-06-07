@@ -11,7 +11,7 @@ authors = "rassvet_ii"
 description = '''
 Increase collision box size to match the CMMRP models.
 '''
-#logoFile = ""
+logoFile = "assets/cmmce/icon.png"
 
 [[dependencies.cmmce]]
 modId = "neoforge"
