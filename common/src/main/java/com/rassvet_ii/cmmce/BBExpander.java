@@ -1,5 +1,6 @@
 package com.rassvet_ii.cmmce;
 
+import com.rassvet_ii.cmmce.config.CMMCEConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.predicate.entity.EntityPredicates;

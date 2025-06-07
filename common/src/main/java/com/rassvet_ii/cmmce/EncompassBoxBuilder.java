@@ -1,13 +1,18 @@
 package com.rassvet_ii.cmmce;
 
+import com.rassvet_ii.cmmce.mixin.IMultiPhase;
+import com.rassvet_ii.cmmce.mixin.IMultiPhaseParameters;
+import com.rassvet_ii.cmmce.mixin.ITexture;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import org.joml.Vector3f;
 
-import java.util.Map;
+import java.util.*;
 
 public class EncompassBoxBuilder implements VertexConsumerProvider {
     private final VertexConsumerProvider source;
@@ -22,11 +27,32 @@ public class EncompassBoxBuilder implements VertexConsumerProvider {
 
     @Override
     public VertexConsumer getBuffer(RenderLayer layer) {
-        return layers.computeIfAbsent(layer, k -> (
-                layer.getName().startsWith("entity") && !layer.getName().equals("entity_shadow")
-                        ? new Wrapper(source.getBuffer(layer), this)
-                        : source.getBuffer(layer)
-        ));
+        return isEntityBody(layer)
+                ? layers.computeIfAbsent(layer, k -> new Wrapper(source.getBuffer(layer), this))
+                : source.getBuffer(layer);
+    }
+
+//    private static final Set<Identifier> dejavu = Sets.newConcurrentHashSet();
+    private boolean isEntityBody(RenderLayer layer) {
+        if (!layer.getName().startsWith("entity") || layer.getName().equals("entity_shadow")) {
+            return false;
+        }
+
+        @SuppressWarnings("ConstantValue")
+        var optional = layer instanceof IMultiPhase phase
+                && ((Object) phase.getPhases() instanceof IMultiPhaseParameters params)
+                && ((Object) params.getTexture() instanceof ITexture texture)
+                ? texture.getId0()
+                : Optional.<Identifier>empty();
+
+        // noinspection ConstantValue
+        if (optional.isEmpty()) return false;
+        var id = optional.get();
+
+//        if (dejavu.add(id)) System.out.println(dejavu);
+
+        // noinspection deprecation
+        return !id.equals(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
     }
 
     public Box build() {

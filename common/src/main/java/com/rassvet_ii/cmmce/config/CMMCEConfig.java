@@ -1,4 +1,4 @@
-package com.rassvet_ii.cmmce;
+package com.rassvet_ii.cmmce.config;
 
 import com.google.gson.*;
 import dev.architectury.platform.Platform;
@@ -28,22 +28,63 @@ public class CMMCEConfig {
             .build();
 
     @SerialEntry
-    public FilterMode filterMode = FilterMode.WhiteList;
+    public FilterMode filterMode = FilterMode.Enable;
 
     @SerialEntry
     public boolean renderDebugBox = false;
 
     @SerialEntry
-    public List<EntityType<?>> filterEntities = List.of(
-            EntityType.SHEEP,
-            EntityType.COW,
-            EntityType.PIG,
+    public List<EntityType<?>> filterEntities = List.of();
+    public static final List<EntityType<?>> PRESET = List.of(
+            EntityType.ARMADILLO,
+            EntityType.AXOLOTL,
+//            EntityType.BAT,
+            EntityType.BEE, // maybe
+            EntityType.BLAZE,
+            EntityType.BREEZE,
+            EntityType.CAT,
+            EntityType.CAVE_SPIDER,
             EntityType.CHICKEN,
-            EntityType.SLIME,
+            EntityType.COD,
+            EntityType.COW,
+            EntityType.DOLPHIN,
+            EntityType.ENDERMITE,
+            EntityType.FOX,
+            EntityType.FROG,
+            EntityType.GLOW_SQUID,
+            EntityType.GOAT,
+            EntityType.GUARDIAN,
+            EntityType.HOGLIN,
             EntityType.MAGMA_CUBE,
+            EntityType.MOOSHROOM,
+            EntityType.OCELOT,
+            EntityType.PANDA,
+            EntityType.PARROT,
+            EntityType.PHANTOM,
+            EntityType.PIG,
+            EntityType.POLAR_BEAR,
+            EntityType.PUFFERFISH,
+            EntityType.RABBIT,
+            EntityType.SALMON,
+            EntityType.SHEEP,
+            EntityType.SHULKER,
             EntityType.SILVERFISH,
-            EntityType.ENDERMITE
+            EntityType.SLIME,
+            EntityType.SNIFFER,
+            EntityType.SPIDER,
+            EntityType.SQUID,
+            EntityType.TADPOLE,
+//            EntityType.TROPICAL_FISH
+            EntityType.TURTLE,
+            EntityType.VEX,
+//            EntityType.WARDEN
+            EntityType.WOLF,
+            EntityType.ZOGLIN
     );
+
+//    public List<EntityType<?>> filterOverride = List.of(
+//            EntityType.ENDER_DRAGON
+//    );
 
     public FilterMode getFilterMode() {
         return filterMode;
@@ -95,6 +136,15 @@ public class CMMCEConfig {
                         .append(Text.translatable("options.cmmce.filtering_mode.white_list"));
                 case Disable -> Text.of("✖ ").copy()
                         .append(Text.translatable("options.cmmce.filtering_mode.disabled"));
+            };
+        }
+
+        public Text getDisplayNameWithoutIcon() {
+            return switch (this) {
+                case Enable -> Text.translatable("options.cmmce.filtering_mode.enabled");
+                case BlackList -> Text.translatable("options.cmmce.filtering_mode.black_list");
+                case WhiteList -> Text.translatable("options.cmmce.filtering_mode.white_list");
+                case Disable -> Text.translatable("options.cmmce.filtering_mode.disabled");
             };
         }
 

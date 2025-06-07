@@ -1,6 +1,7 @@
 package com.rassvet_ii.cmmce;
 
 
+import com.rassvet_ii.cmmce.config.CMMCEConfigScreen;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -10,7 +11,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 @Mod(Constants.MOD_ID)
 public class CMMCollisionExpandMod {
 
-    public CMMCollisionExpandMod(IEventBus eventBus) {
+    public CMMCollisionExpandMod(IEventBus ignoredEventBus) {
 
         // This method is invoked by the NeoForge mod loader when it is ready
         // to load your mod. You can access NeoForge and Common code in this

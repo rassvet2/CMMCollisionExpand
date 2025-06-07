@@ -1,5 +1,6 @@
 package com.rassvet_ii.cmmce;
 
+import com.rassvet_ii.cmmce.config.CMMCEConfigScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 

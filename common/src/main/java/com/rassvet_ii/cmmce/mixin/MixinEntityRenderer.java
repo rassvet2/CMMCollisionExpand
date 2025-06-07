@@ -3,7 +3,7 @@ package com.rassvet_ii.cmmce.mixin;
 import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.rassvet_ii.cmmce.BBExpander;
-import com.rassvet_ii.cmmce.CMMCEConfig;
+import com.rassvet_ii.cmmce.config.CMMCEConfig;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.state.EntityHitbox;
 import net.minecraft.client.render.entity.state.EntityHitboxAndView;

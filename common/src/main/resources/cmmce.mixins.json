@@ -7,6 +7,9 @@
     "MixinEntity"
   ],
   "client": [
+    "IMultiPhase",
+    "IMultiPhaseParameters",
+    "ITexture",
     "MixinEntityRenderDispatcher",
     "MixinEntityRenderer",
     "MixinProjectileUtil"

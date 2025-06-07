@@ -1,5 +1,6 @@
 package com.rassvet_ii.cmmce;
 
+import com.rassvet_ii.cmmce.config.CMMCEConfig;
 import com.rassvet_ii.cmmce.platform.Services;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
