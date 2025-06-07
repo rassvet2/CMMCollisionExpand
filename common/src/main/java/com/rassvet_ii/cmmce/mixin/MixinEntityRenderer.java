@@ -3,6 +3,7 @@ package com.rassvet_ii.cmmce.mixin;
 import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.rassvet_ii.cmmce.BBExpander;
+import com.rassvet_ii.cmmce.CMMCEConfig;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.state.EntityHitbox;
 import net.minecraft.client.render.entity.state.EntityHitboxAndView;
@@ -21,7 +22,7 @@ public class MixinEntityRenderer {
             Entity entity, float tickProgress, boolean green, CallbackInfoReturnable<EntityHitboxAndView> cir,
             @Local ImmutableList.Builder<EntityHitbox> builder
     ) {
-        if (BBExpander.shouldExpand(entity)) {
+        if (CMMCEConfig.HANDLER.instance().renderDebugBox() && BBExpander.shouldExpand(entity)) {
             var box = BBExpander.expand(entity, entity.getBoundingBox());
 
             builder.add(new EntityHitbox(

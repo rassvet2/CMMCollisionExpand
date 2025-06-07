@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
             "com.rassvet_ii.cmmce.CMMCollisionExpandMod"
+        ],
+        "modmenu": [
+            "com.rassvet_ii.cmmce.ModMenuIntegration"
         ]
     },
     "mixins": [
@@ -27,5 +30,9 @@
         "minecraft": "~1.21.5",
         "java": ">=21",
         "architectury": ">=16.1.4"
+    },
+    "recommends":  {
+        "yet_another_config_lib_v3": ">=3.6.6",
+        "modmenu": ">=14.0.0-rc.2"
     }
 }

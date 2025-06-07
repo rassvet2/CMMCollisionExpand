@@ -2,7 +2,10 @@ package com.rassvet_ii.cmmce;
 
 
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @Mod(Constants.MOD_ID)
 public class CMMCollisionExpandMod {
@@ -17,5 +20,11 @@ public class CMMCollisionExpandMod {
         Constants.LOG.info("Hello NeoForge world!");
         CommonClass.init();
 
+        if (ModList.get().isLoaded(Constants.YACL_MOD_ID)) {
+            ModLoadingContext.get().registerExtensionPoint(
+                    IConfigScreenFactory.class,
+                    () -> (client, parent) -> CMMCEConfig.build(parent)
+            );
+        }
     }
 }
