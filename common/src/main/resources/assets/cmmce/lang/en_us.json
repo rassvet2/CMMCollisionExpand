@@ -1,0 +1,20 @@
+{
+  "options.cmmce.general": "General",
+  "options.cmmce.filter_settings": "Filter Settings",
+  "options.cmmce.filtering_mode.name": "Filtering Method",
+  "options.cmmce.filtering_mode.description": "How the filter list is applied for mobs.\nThe CMMCE itself can also be enabled or disabled here.",
+  "options.cmmce.filtering_mode.template": "\"%s\"\n%s\n",
+  "options.cmmce.filtering_mode.disabled": "Disable anyway",
+  "options.cmmce.filtering_mode.disabled.description": "Disable CMMCE.",
+  "options.cmmce.filtering_mode.black_list": "Excludes the specified entity",
+  "options.cmmce.filtering_mode.black_list.description": "Disable CMMCE for the mobs specified in the filter list.",
+  "options.cmmce.filtering_mode.white_list": "Specified entity only",
+  "options.cmmce.filtering_mode.white_list.description": "Enable CMMCE only for mobs specified in the filter list.",
+  "options.cmmce.filtering_mode.enabled": "Enable anyway",
+  "options.cmmce.filtering_mode.enabled.description": "Enable CMMCE for all mobs without need to change the filter list.",
+  "options.cmmce.filter_list.name": "Filter List",
+  "options.cmmce.filter_list.description": "Don't forget to set the filter method above to enable this!",
+  "options.cmmce.debug_settings": "Debug Settings",
+  "options.cmmce.debug_box_render.name": "Enable Collision Box Debugging",
+  "options.cmmce.debug_box_render.description": "The collision box display with F3+B will show the collision box expanded by CMMCE."
+}

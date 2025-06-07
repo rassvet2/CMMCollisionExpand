@@ -68,7 +68,8 @@ public class EntityController extends AbstractDropdownController<EntityType<?>> 
                     String[] paths = (namespace.isPresent() ? sep[1] : sep[0]).split("_");
                     return Arrays.stream(paths).allMatch(id.getPath()::contains);
                 })
-                .sorted(Comparator.<Identifier, Integer>comparing((id) -> Strings.commonPrefix(path, id.getPath()).length())
-                        .thenComparing(Identifier::compareTo));
+                .sorted(Comparator.<Identifier, Integer>comparing((id) ->
+                                -Strings.commonPrefix(path, id.getPath()).length() / Math.max(id.getPath().length(), 1))
+                        .thenComparing(Comparator.naturalOrder()));
     }
 }

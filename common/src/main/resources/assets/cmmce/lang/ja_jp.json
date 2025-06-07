@@ -1,0 +1,21 @@
+{
+  "options.cmmce.general": "一般設定",
+  "options.cmmce.filter_settings": "フィルタ設定",
+  "options.cmmce.filtering_mode.name": "フィルタ方式",
+  "options.cmmce.filtering_mode.description":
+    "フィルターリストをどのように適用するか設定できます。\nCMMCE自体の有効・無効もここで切り替えられます。",
+  "options.cmmce.filtering_mode.template": "「%s」\n%s\n",
+  "options.cmmce.filtering_mode.disabled": "フィルタに関係なく無効",
+  "options.cmmce.filtering_mode.disabled.description": "CMMCEを無効にします。",
+  "options.cmmce.filtering_mode.black_list": "指定したエンティティを除く",
+  "options.cmmce.filtering_mode.black_list.description": "フィルターリストに指定したエンティティでCMMCEを無効にします。",
+  "options.cmmce.filtering_mode.white_list": "指定したエンティティのみ",
+  "options.cmmce.filtering_mode.white_list.description": "フィルターリストに指定したエンティティに対してのみCMMCEを有効にします。",
+  "options.cmmce.filtering_mode.enabled": "フィルタに関係なく有効",
+  "options.cmmce.filtering_mode.enabled.description": "フィルターリストを変更することなくすべてのMobに対して有効化できます。",
+  "options.cmmce.filter_list.name": "フィルターリスト",
+  "options.cmmce.filter_list.description": "上のフィルタ方式の設定を忘れずに！",
+  "options.cmmce.debug_settings": "デバッグ設定",
+  "options.cmmce.debug_box_render.name": "当たり判定のデバッグを有効化",
+  "options.cmmce.debug_box_render.description": "F3+Bでの当たり判定に、このModで拡張された当たり判定を表示します。"
+}

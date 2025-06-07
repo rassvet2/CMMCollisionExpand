@@ -11,40 +11,59 @@ import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.EntityType;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
+import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 public class CMMCEConfig {
     public static Screen build(@Nullable Screen parent) {
-//        ReloadListenerRegistry.register(ResourceType.CLIENT_RESOURCES, );
         return YetAnotherConfigLib.create(CMMCEConfig.HANDLER, (defaults, config, builder) -> builder
                 .title(Text.of("CMM Collision Expand"))
                 .category(ConfigCategory.createBuilder()
-                        .name(Text.of("General"))
+                        .name(Text.translatable("options.cmmce.general"))
                         .group(OptionGroup.createBuilder()
-                                .name(Text.of("Filter Settings"))
+                                .name(Text.translatable("options.cmmce.filter_settings"))
                                 .option(Option.<FilterMode>createBuilder()
-                                        .name(Text.of("Filtering Mode"))
+                                        .name(Text.translatable("options.cmmce.filtering_mode.name"))
+                                        .description(OptionDescription.createBuilder()
+                                                .text(Text.translatable("options.cmmce.filtering_mode.description"))
+                                                .text(Text.empty())
+                                                .text(FilterMode.Enable.getDescriptionText())
+                                                .text(FilterMode.BlackList.getDescriptionText())
+                                                .text(FilterMode.WhiteList.getDescriptionText())
+                                                .text(FilterMode.Disable.getDescriptionText())
+                                                .build())
                                         .controller(option -> EnumControllerBuilder.create(option).enumClass(FilterMode.class))
                                         .binding(defaults.filterMode, config::getFilterMode, config::setFilterMode)
                                         .build())
                                 .build())
                         .option(ListOption.<EntityType<?>>createBuilder()
-                                .name(Text.of("Filter List"))
+                                .name(Text.translatable("options.cmmce.filter_list.name"))
+                                .description(OptionDescription.createBuilder()
+                                        .text(Text.translatable("options.cmmce.filter_list.description")
+                                                .styled(s -> s.withUnderline(true)))
+                                        .text(Text.empty())
+                                        .text(FilterMode.Enable.getDescriptionText())
+                                        .text(FilterMode.BlackList.getDescriptionText())
+                                        .text(FilterMode.WhiteList.getDescriptionText())
+                                        .text(FilterMode.Disable.getDescriptionText())
+                                        .build())
                                 .insertEntriesAtEnd(true)
                                 .customController(EntityController::new)
                                 .initial(EntityType.CREEPER)
                                 .binding(defaults.filterEntities, config::getFilterEntities, config::setFilterEntities)
                                 .build())
                         .group(OptionGroup.createBuilder()
-                                .name(Text.of("Debug Settings"))
+                                .name(Text.translatable("options.cmmce.debug_settings"))
                                 .option(Option.<Boolean>createBuilder()
-                                        .name(Text.of("Debug Collision Box"))
+                                        .name(Text.translatable("options.cmmce.debug_box_render.name"))
+                                        .description(OptionDescription.of(Text.translatable("options.cmmce.debug_box_render.description")))
                                         .controller(TickBoxControllerBuilder::create)
                                         .binding(defaults.renderDebugBox, config::renderDebugBox, config::setRenderDebugBox)
                                         .build())
@@ -105,7 +124,7 @@ public class CMMCEConfig {
         this.filterEntities = filterEntities;
     }
 
-    public enum FilterMode {
+    public enum FilterMode implements NameableEnum {
         Enable,
         BlackList,
         WhiteList,
@@ -117,6 +136,38 @@ public class CMMCEConfig {
                 case BlackList -> !containedInFilter;
                 case WhiteList -> containedInFilter;
                 case Disable -> false;
+            };
+        }
+
+        @Override
+        public Text getDisplayName() {
+            return switch (this) {
+                case Enable -> Text.of("✔ ").copy()
+                        .append(Text.translatable("options.cmmce.filtering_mode.enabled"));
+                case BlackList -> Text.of("\uD83D\uDCDD ").copy()
+                        .append(Text.translatable("options.cmmce.filtering_mode.black_list"));
+                case WhiteList -> Text.of("\uD83D\uDCDD ").copy()
+                        .append(Text.translatable("options.cmmce.filtering_mode.white_list"));
+                case Disable -> Text.of("✖ ").copy()
+                        .append(Text.translatable("options.cmmce.filtering_mode.disabled"));
+            };
+        }
+
+        public Text getDescriptionText() {
+            UnaryOperator<Style> style = s -> s.withBold(true).withColor(Colors.LIGHT_YELLOW);
+            return switch (this) {
+                case Enable -> Text.translatable("options.cmmce.filtering_mode.template",
+                        Text.translatable("options.cmmce.filtering_mode.enabled").styled(style),
+                        Text.translatable("options.cmmce.filtering_mode.enabled.description"));
+                case BlackList -> Text.translatable("options.cmmce.filtering_mode.template",
+                        Text.translatable("options.cmmce.filtering_mode.black_list").styled(style),
+                        Text.translatable("options.cmmce.filtering_mode.black_list.description"));
+                case WhiteList -> Text.translatable("options.cmmce.filtering_mode.template",
+                        Text.translatable("options.cmmce.filtering_mode.white_list").styled(style),
+                        Text.translatable("options.cmmce.filtering_mode.white_list.description"));
+                case Disable -> Text.translatable("options.cmmce.filtering_mode.template",
+                        Text.translatable("options.cmmce.filtering_mode.disabled").styled(style),
+                        Text.translatable("options.cmmce.filtering_mode.disabled.description"));
             };
         }
     }
