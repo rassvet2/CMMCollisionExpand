@@ -6,10 +6,10 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownController;
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -23,17 +23,17 @@ public class EntityController extends AbstractDropdownController<EntityType<?>> 
 
     @Override
     public String getString() {
-        return EntityType.getId(this.option.pendingValue()).toString();
+        return EntityType.getKey(this.option.pendingValue()).toString();
     }
 
     @Override
     public void setFromString(String value) {
-        this.option.requestSet(EntityType.get(value).orElse(this.option.pendingValue()));
+        this.option.requestSet(EntityType.byString(value).orElse(this.option.pendingValue()));
     }
 
     @Override
-    public Text formatValue() {
-        return Text.literal(this.getString());
+    public Component formatValue() {
+        return Component.literal(this.getString());
     }
 
     @Override
@@ -47,7 +47,7 @@ public class EntityController extends AbstractDropdownController<EntityType<?>> 
         return getCandidates(value)
                 .skip(offset)
                 .findFirst()
-                .map(Identifier::toString)
+                .map(ResourceLocation::toString)
                 .orElseGet(this::getString);
     }
 
@@ -56,19 +56,19 @@ public class EntityController extends AbstractDropdownController<EntityType<?>> 
         return new EntityControllerElement(this, screen, widgetDimension);
     }
 
-    public static Stream<Identifier> getCandidates(String value) {
+    public static Stream<ResourceLocation> getCandidates(String value) {
         String[] sep = value.split(":", 2);
         Optional<String> namespace = sep.length == 1 ? Optional.empty() : Optional.of(sep[0]);
         String path = (namespace.isPresent() ? sep[1] : sep[0]);
 
-        return Registries.ENTITY_TYPE.getIds().stream()
+        return BuiltInRegistries.ENTITY_TYPE.keySet().stream()
                 .filter((id) -> {
                     if (namespace.isPresent() && !id.getNamespace().contains(namespace.get())) return false;
                     if (path.isBlank()) return true;
                     String[] paths = (namespace.isPresent() ? sep[1] : sep[0]).split("_");
                     return Arrays.stream(paths).allMatch(id.getPath()::contains);
                 })
-                .sorted(Comparator.<Identifier, Integer>comparing((id) ->
+                .sorted(Comparator.<ResourceLocation, Integer>comparing((id) ->
                                 -Strings.commonPrefix(path, id.getPath()).length() / Math.max(id.getPath().length(), 1))
                         .thenComparing(Comparator.naturalOrder()));
     }

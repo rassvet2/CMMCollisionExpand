@@ -1,11 +1,11 @@
 package com.rassvet_ii.cmmce.mixin;
 
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.renderer.RenderType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(RenderLayer.MultiPhase.class)
+@Mixin(RenderType.CompositeRenderType.class)
 public interface IMultiPhase {
-    @Accessor("phases")
-    RenderLayer.MultiPhaseParameters getPhases();
+    @Accessor("state")
+    RenderType.CompositeState getPhases();
 }

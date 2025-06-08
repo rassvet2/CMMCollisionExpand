@@ -1,30 +1,31 @@
 package com.rassvet_ii.cmmce;
 
 import com.rassvet_ii.cmmce.config.CMMCEConfig;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.phys.AABB;
+
 
 public class BBExpander {
     public static boolean shouldExpand(Entity entity) {
-        if (!EntityPredicates.CAN_HIT.test(entity)) return false;
+        if (!EntitySelector.CAN_BE_PICKED.test(entity)) return false;
 
-        var player = MinecraftClient.getInstance().player;
+        var player = Minecraft.getInstance().player;
         if (player == null) return false;
-        if (player.getPos().squaredDistanceTo(entity.getPos()) > MathHelper.square(player.getEntityInteractionRange() + 1)) return false;
+        if (player.position().distanceToSqr(entity.position()) > Mth.square(player.entityInteractionRange() + 1)) return false;
 
         var containedInFilter = CMMCEConfig.HANDLER.instance().getFilterEntities().contains(entity.getType());
         return CMMCEConfig.HANDLER.instance().getFilterMode().shouldExpand(containedInFilter);
     }
 
-    public static Box expand(Entity entity, Box box) {
+    public static AABB expand(Entity entity, AABB box) {
         var encompassBox = entity instanceof ICMMCEBoxHolder holder
                 ? holder.cmmce$getEncompassBox()
                 : null;
         if (encompassBox == null) return box;
 
-        return box.union(encompassBox.offset(entity.getPos()));
+        return box.minmax(encompassBox.move(entity.position()));
     }
 }

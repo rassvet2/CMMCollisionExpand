@@ -6,13 +6,13 @@ import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.gui.controllers.LabelController;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.EntityType;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
@@ -24,10 +24,10 @@ public class CMMCEConfigScreen {
     public static Screen build(@Nullable Screen parent) {
         Holders holders = new Holders();
         return YetAnotherConfigLib.create(CMMCEConfig.HANDLER, (defaults, config, builder) -> builder
-                .title(Text.of("CMM Collision Expand"))
+                .title(Component.literal("CMM Collision Expand"))
                 .category(ConfigCategory.createBuilder()
-                        .name(Text.translatable("options.cmmce.general"))
-                        .tooltip(Text.of("General Settings"))
+                        .name(Component.translatable("options.cmmce.general"))
+                        .tooltip(Component.literal("General Settings"))
                         .group(buildFilterSettings(defaults, config, holders))
                         .group(holders.filterList.set(buildFilterList(defaults, config)))
                         .group(buildDebugSettings(defaults, config))
@@ -41,12 +41,12 @@ public class CMMCEConfigScreen {
             CMMCEConfig defaults, CMMCEConfig config, Holders holders
     ) {
         return OptionGroup.createBuilder()
-                .name(Text.translatable("options.cmmce.filter_settings"))
+                .name(Component.translatable("options.cmmce.filter_settings"))
                 .option(holders.filterMode.set(Option.<FilterMode>createBuilder()
-                        .name(Text.translatable("options.cmmce.filtering_mode.name"))
+                        .name(Component.translatable("options.cmmce.filtering_mode.name"))
                         .description(OptionDescription.createBuilder()
-                                .text(Text.translatable("options.cmmce.filtering_mode.description"))
-                                .text(Text.empty())
+                                .text(Component.translatable("options.cmmce.filtering_mode.description"))
+                                .text(Component.empty())
                                 .text(FilterMode.Enable.getDescriptionText())
                                 .text(FilterMode.BlackList.getDescriptionText())
                                 .text(FilterMode.WhiteList.getDescriptionText())
@@ -61,13 +61,13 @@ public class CMMCEConfigScreen {
                                 })))
                         .build()))
                 .option(ButtonOption.createBuilder()
-                        .name(Text.translatable("options.cmmce.load_preset.name"))
-                        .text(Text.of("▶"))
+                        .name(Component.translatable("options.cmmce.load_preset.name"))
+                        .text(Component.literal("▶"))
                         .description(OptionDescription.createBuilder()
-                                .text(Text.translatable("options.cmmce.load_preset.description.line0"))
-                                .text(Text.translatable("options.cmmce.load_preset.description.line1",
-                                        FilterMode.WhiteList.getDisplayNameWithoutIcon().copy().styled(STRONG)))
-                                .text(Text.translatable("options.cmmce.load_preset.description.line2").styled(WEAK))
+                                .text(Component.translatable("options.cmmce.load_preset.description.line0"))
+                                .text(Component.translatable("options.cmmce.load_preset.description.line1",
+                                        FilterMode.WhiteList.getDisplayNameWithoutIcon().copy().withStyle(STRONG)))
+                                .text(Component.translatable("options.cmmce.load_preset.description.line2").withStyle(WEAK))
                                 .build())
                         .action((screen, b) -> {
                             holders.filterMode.get().orElseThrow().requestSet(FilterMode.WhiteList);
@@ -81,11 +81,11 @@ public class CMMCEConfigScreen {
             CMMCEConfig defaults, CMMCEConfig config
     ) {
         return ListOption.<EntityType<?>>createBuilder()
-                .name(Text.translatable("options.cmmce.filter_list.name"))
+                .name(Component.translatable("options.cmmce.filter_list.name"))
                 .description(OptionDescription.createBuilder()
-                        .text(Text.translatable("options.cmmce.filter_list.description")
-                                .formatted(Formatting.UNDERLINE))
-                        .text(Text.empty())
+                        .text(Component.translatable("options.cmmce.filter_list.description")
+                                .withStyle(ChatFormatting.UNDERLINE))
+                        .text(Component.empty())
                         .text(FilterMode.Enable.getDescriptionText())
                         .text(FilterMode.BlackList.getDescriptionText())
                         .text(FilterMode.WhiteList.getDescriptionText())
@@ -100,10 +100,10 @@ public class CMMCEConfigScreen {
 
     private static OptionGroup buildDebugSettings(CMMCEConfig defaults, CMMCEConfig config) {
         return OptionGroup.createBuilder()
-                .name(Text.translatable("options.cmmce.debug_settings"))
+                .name(Component.translatable("options.cmmce.debug_settings"))
                 .option(Option.<Boolean>createBuilder()
-                        .name(Text.translatable("options.cmmce.debug_box_render.name"))
-                        .description(OptionDescription.of(Text.translatable("options.cmmce.debug_box_render.description")))
+                        .name(Component.translatable("options.cmmce.debug_box_render.name"))
+                        .description(OptionDescription.of(Component.translatable("options.cmmce.debug_box_render.description")))
                         .controller(TickBoxControllerBuilder::create)
                         .binding(defaults.renderDebugBox, config::renderDebugBox, config::setRenderDebugBox)
                         .build())
@@ -112,31 +112,31 @@ public class CMMCEConfigScreen {
 
     private static OptionGroup buildAbout() {
 
-        List<Text> lines = List.of(
-                Text.translatable("options.cmmce.about.line0",
-                        Text.translatable("options.cmmce.about.line0.cmmrp")
-                                .styled(STRONG).styled(url(Constants.CMMRP_LINK))),
-                Text.translatable("options.cmmce.about.line1",
-                        Text.translatable("options.cmmce.about.line1.github")
-                                .styled(url(Constants.CMMCE_LINK))),
-                Text.empty(),
-                Text.translatable("options.cmmce.about.credits").copy().styled(s -> s.withBold(true)),
-                Text.empty(),
-                Text.translatable("options.cmmce.about.cmmrp").copy().styled(STRONG).styled(url(Constants.CMMRP_LINK)),
-                Text.of(Constants.CMMRP_LINK.toString()).copy().styled(WEAK).styled(url(Constants.CMMRP_LINK)),
-                Text.empty(),
-                Text.translatable("options.cmmce.about.yacl").copy().styled(STRONG).styled(url(Constants.YACL_LINK)),
-                Text.of(Constants.YACL_LINK.toString()).copy().styled(WEAK).styled(url(Constants.YACL_LINK)),
-                Text.empty()
+        List<Component> lines = List.of(
+                Component.translatable("options.cmmce.about.line0",
+                        Component.translatable("options.cmmce.about.line0.cmmrp")
+                                .withStyle(STRONG).withStyle(url(Constants.CMMRP_LINK))),
+                Component.translatable("options.cmmce.about.line1",
+                        Component.translatable("options.cmmce.about.line1.github")
+                                .withStyle(url(Constants.CMMCE_LINK))),
+                Component.empty(),
+                Component.translatable("options.cmmce.about.credits").copy().withStyle(s -> s.withBold(true)),
+                Component.empty(),
+                Component.translatable("options.cmmce.about.cmmrp").copy().withStyle(STRONG).withStyle(url(Constants.CMMRP_LINK)),
+                Component.literal(Constants.CMMRP_LINK.toString()).copy().withStyle(WEAK).withStyle(url(Constants.CMMRP_LINK)),
+                Component.empty(),
+                Component.translatable("options.cmmce.about.yacl").copy().withStyle(STRONG).withStyle(url(Constants.YACL_LINK)),
+                Component.literal(Constants.YACL_LINK.toString()).copy().withStyle(WEAK).withStyle(url(Constants.YACL_LINK)),
+                Component.empty()
         );
 
         return OptionGroup.createBuilder()
-                .name(Text.translatable("options.cmmce.about"))
-                .option(Option.<Text>createBuilder()
-                        .name(Text.translatable("options.cmmce.about"))
+                .name(Component.translatable("options.cmmce.about"))
+                .option(Option.<Component>createBuilder()
+                        .name(Component.translatable("options.cmmce.about"))
                         .description(OptionDescription.createBuilder().text(lines).build())
                         .customController(LabelController::new)
-                        .binding(Binding.immutable(Texts.join(lines, Text.of("\n"))))
+                        .binding(Binding.immutable(ComponentUtils.formatList(lines, Component.literal("\n"))))
                         .build())
                 .build();
     }
@@ -159,10 +159,10 @@ public class CMMCEConfigScreen {
         public final Holder<ListOption<EntityType<?>>> filterList = new Holder<>();
     }
 
-    private static final UnaryOperator<Style> STRONG = s -> s.withFormatting(Formatting.YELLOW, Formatting.BOLD);
-    private static final UnaryOperator<Style> WEAK = s -> s.withFormatting(Formatting.GRAY);
+    private static final UnaryOperator<Style> STRONG = s -> s.applyFormats(ChatFormatting.YELLOW, ChatFormatting.BOLD);
+    private static final UnaryOperator<Style> WEAK = s -> s.applyFormats(ChatFormatting.GRAY);
 
     private static UnaryOperator<Style> url(URI url) {
-        return s -> s.withFormatting(Formatting.UNDERLINE).withClickEvent(new ClickEvent.OpenUrl(url));
+        return s -> s.applyFormats(ChatFormatting.UNDERLINE).withClickEvent(new ClickEvent.OpenUrl(url));
     }
 }

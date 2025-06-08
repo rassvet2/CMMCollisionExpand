@@ -1,39 +1,40 @@
 package com.rassvet_ii.cmmce;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.rassvet_ii.cmmce.mixin.IMultiPhase;
 import com.rassvet_ii.cmmce.mixin.IMultiPhaseParameters;
 import com.rassvet_ii.cmmce.mixin.ITexture;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Box;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import java.util.*;
 
-public class EncompassBoxBuilder implements VertexConsumerProvider {
-    private final VertexConsumerProvider source;
-    private final Map<RenderLayer, VertexConsumer> layers = new Object2ObjectOpenHashMap<>();
-    private final Box.Builder builder = new Box.Builder();
+public class EncompassBoxBuilder implements MultiBufferSource {
+    private final MultiBufferSource source;
+    private final Map<RenderType, VertexConsumer> layers = new Object2ObjectOpenHashMap<>();
+    private final AABB.Builder builder = new AABB.Builder();
     private final Vector3f buf = new Vector3f();
     private boolean validVertex = false;
 
-    public EncompassBoxBuilder(VertexConsumerProvider source) {
+    public EncompassBoxBuilder(MultiBufferSource source) {
         this.source = source;
     }
 
     @Override
-    public VertexConsumer getBuffer(RenderLayer layer) {
+    public @NotNull VertexConsumer getBuffer(RenderType layer) {
         return isEntityBody(layer)
                 ? layers.computeIfAbsent(layer, k -> new Wrapper(source.getBuffer(layer), this))
                 : source.getBuffer(layer);
     }
 
-//    private static final Set<Identifier> dejavu = Sets.newConcurrentHashSet();
-    private boolean isEntityBody(RenderLayer layer) {
+//    private static final Set<ResourceLocation> dejavu = Sets.newConcurrentHashSet();
+    private boolean isEntityBody(RenderType layer) {
         if (!layer.getName().startsWith("entity") || layer.getName().equals("entity_shadow")) {
             return false;
         }
@@ -43,7 +44,7 @@ public class EncompassBoxBuilder implements VertexConsumerProvider {
                 && ((Object) phase.getPhases() instanceof IMultiPhaseParameters params)
                 && ((Object) params.getTexture() instanceof ITexture texture)
                 ? texture.getId0()
-                : Optional.<Identifier>empty();
+                : Optional.<ResourceLocation>empty();
 
         // noinspection ConstantValue
         if (optional.isEmpty()) return false;
@@ -52,20 +53,20 @@ public class EncompassBoxBuilder implements VertexConsumerProvider {
 //        if (dejavu.add(id)) System.out.println(dejavu);
 
         // noinspection deprecation
-        return !id.equals(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+        return !id.equals(TextureAtlas.LOCATION_BLOCKS);
     }
 
-    public Box build() {
-        if (validVertex) builder.encompass(buf);
+    public AABB build() {
+        if (validVertex) builder.include(buf);
         return builder.build();
     }
 
-    public VertexConsumerProvider unwrap() {
+    public MultiBufferSource unwrap() {
         return source;
     }
 
     private void vertex(float x, float y, float z) {
-        if (validVertex) builder.encompass(buf);
+        if (validVertex) builder.include(buf);
         buf.set(x, y, z);
         validVertex = buf.isFinite();
         if (buf.lengthSquared() > 100) {
@@ -88,40 +89,40 @@ public class EncompassBoxBuilder implements VertexConsumerProvider {
         }
 
         @Override
-        public VertexConsumer vertex(float x, float y, float z) {
-            source.vertex(x, y, z);
+        public @NotNull VertexConsumer addVertex(float x, float y, float z) {
+            source.addVertex(x, y, z);
             builder.vertex(x, y, z);
             return this;
         }
 
         @Override
-        public VertexConsumer color(int red, int green, int blue, int alpha) {
-            source.color(red, green, blue, alpha);
+        public @NotNull VertexConsumer setColor(int red, int green, int blue, int alpha) {
+            source.setColor(red, green, blue, alpha);
             if (alpha != 255) builder.invalidate();
             return this;
         }
 
         @Override
-        public VertexConsumer texture(float u, float v) {
-            source.texture(u, v);
+        public @NotNull VertexConsumer setUv(float f, float g) {
+            source.setUv(f, g);
             return this;
         }
 
         @Override
-        public VertexConsumer overlay(int u, int v) {
-            source.overlay(u, v);
+        public @NotNull VertexConsumer setUv1(int i, int j) {
+            source.setUv1(i, j);
             return this;
         }
 
         @Override
-        public VertexConsumer light(int u, int v) {
-            source.light(u, v);
+        public @NotNull VertexConsumer setUv2(int i, int j) {
+            source.setUv2(i, j);
             return this;
         }
 
         @Override
-        public VertexConsumer normal(float x, float y, float z) {
-            source.normal(x, y, z);
+        public @NotNull VertexConsumer setNormal(float f, float g, float h) {
+            source.setNormal(f, g, h);
             return this;
         }
     }

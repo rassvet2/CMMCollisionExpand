@@ -28,16 +28,21 @@ subprojects {
         maven("https://maven.isxander.dev/releases") {
             name = "Xander Maven"
         }
+
+        maven("https://maven.parchmentmc.org") {
+            name = "ParchmentMC"
+        }
     }
 
     val loom = project.extensions.getByName("loom") as LoomGradleExtensionAPI
 
-    @Suppress("UnstableApiUsage")
     dependencies {
         "minecraft"("net.minecraft:minecraft:${property("minecraft_version")}")
+        @Suppress("UnstableApiUsage")
         "mappings"(loom.layered {
-            mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
-            mappings("dev.architectury:yarn-mappings-patch-neoforge:${property("yarn_mappings_patch_neoforge_version")}")
+            officialMojangMappings()
+            @Suppress("UnstableApiUsage")
+            parchment("org.parchmentmc.data:parchment-${property("parchment_version")}@zip")
         })
     }
 

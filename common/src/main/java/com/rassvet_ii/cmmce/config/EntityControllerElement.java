@@ -3,13 +3,13 @@ package com.rassvet_ii.cmmce.config;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownControllerElement;
-import net.minecraft.entity.EntityType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
-public class EntityControllerElement extends AbstractDropdownControllerElement<EntityType<?>, Identifier> {
+public class EntityControllerElement extends AbstractDropdownControllerElement<EntityType<?>, ResourceLocation> {
     private final EntityController entityController;
 
     public EntityControllerElement(EntityController control, YACLScreen screen, Dimension<Integer> dim) {
@@ -18,20 +18,20 @@ public class EntityControllerElement extends AbstractDropdownControllerElement<E
     }
 
     @Override
-    public List<Identifier> computeMatchingValues() {
+    public List<ResourceLocation> computeMatchingValues() {
         return EntityController.getCandidates(this.inputField).toList();
     }
 
     @Override
-    public String getString(Identifier identifier) {
+    public String getString(ResourceLocation identifier) {
         return identifier.toString();
     }
 
-    protected Text getValueText() {
+    protected Component getValueText() {
         return !this.inputField.isEmpty() && this.entityController != null
                 ? this.inputFieldFocused
-                    ? Text.literal(this.inputField)
-                    : this.entityController.option().pendingValue().getName()
+                    ? Component.literal(this.inputField)
+                    : this.entityController.option().pendingValue().getDescription()
                 : super.getValueText();
     }
 }

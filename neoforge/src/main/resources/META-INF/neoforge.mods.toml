@@ -13,33 +13,32 @@ ${mod_description}
 '''
 logoFile = "assets/cmmce/icon.png"
 
-[["dependencies.${cmmce}"]]
+[["dependencies.${mod_id}"]]
 modId = "neoforge"
 type = "required"
 versionRange = "[21.5,)"
 ordering = "NONE"
 side = "BOTH"
 
-[["dependencies.${cmmce}"]]
+[["dependencies.${mod_id}"]]
 modId = "minecraft"
 type = "required"
 versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[["dependencies.${cmmce}"]]
+[["dependencies.${mod_id}"]]
 modId = "architectury"
 type = "required"
 versionRange = "[${architectury_api_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
-[["dependencies.${cmmce}"]]
+[["dependencies.${mod_id}"]]
 modId = "yet_another_config_lib_v3"
 mandatory = false
-versionRange = "[${yacL_version_id},)"
+versionRange = "[${yacl_version},)"
 ordering = "NONE"
 side = "CLIENT"
-
 [[mixins]]
 config = "cmmce.mixins.json"

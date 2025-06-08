@@ -6,11 +6,11 @@ import dev.isxander.yacl3.api.NameableEnum;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
-import net.minecraft.entity.EntityType;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.function.UnaryOperator;
 
 public class CMMCEConfig {
     public static final ConfigClassHandler<CMMCEConfig> HANDLER = ConfigClassHandler.createBuilder(CMMCEConfig.class)
-            .id(Identifier.of("cmmce:config"))
+            .id(ResourceLocation.parse("cmmce:config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(Platform.getConfigFolder().resolve("cmmce.json5"))
                     .setJson5(true)
@@ -126,43 +126,43 @@ public class CMMCEConfig {
         }
 
         @Override
-        public Text getDisplayName() {
+        public Component getDisplayName() {
             return switch (this) {
-                case Enable -> Text.of("✔ ").copy()
-                        .append(Text.translatable("options.cmmce.filtering_mode.enabled"));
-                case BlackList -> Text.of("\uD83D\uDCDD ").copy()
-                        .append(Text.translatable("options.cmmce.filtering_mode.black_list"));
-                case WhiteList -> Text.of("\uD83D\uDCDD ").copy()
-                        .append(Text.translatable("options.cmmce.filtering_mode.white_list"));
-                case Disable -> Text.of("✖ ").copy()
-                        .append(Text.translatable("options.cmmce.filtering_mode.disabled"));
+                case Enable -> Component.literal("✔ ").copy()
+                        .append(Component.translatable("options.cmmce.filtering_mode.enabled"));
+                case BlackList -> Component.literal("\uD83D\uDCDD ").copy()
+                        .append(Component.translatable("options.cmmce.filtering_mode.black_list"));
+                case WhiteList -> Component.literal("\uD83D\uDCDD ").copy()
+                        .append(Component.translatable("options.cmmce.filtering_mode.white_list"));
+                case Disable -> Component.literal("✖ ").copy()
+                        .append(Component.translatable("options.cmmce.filtering_mode.disabled"));
             };
         }
 
-        public Text getDisplayNameWithoutIcon() {
+        public Component getDisplayNameWithoutIcon() {
             return switch (this) {
-                case Enable -> Text.translatable("options.cmmce.filtering_mode.enabled");
-                case BlackList -> Text.translatable("options.cmmce.filtering_mode.black_list");
-                case WhiteList -> Text.translatable("options.cmmce.filtering_mode.white_list");
-                case Disable -> Text.translatable("options.cmmce.filtering_mode.disabled");
+                case Enable -> Component.translatable("options.cmmce.filtering_mode.enabled");
+                case BlackList -> Component.translatable("options.cmmce.filtering_mode.black_list");
+                case WhiteList -> Component.translatable("options.cmmce.filtering_mode.white_list");
+                case Disable -> Component.translatable("options.cmmce.filtering_mode.disabled");
             };
         }
 
-        public Text getDescriptionText() {
-            UnaryOperator<Style> style = s -> s.withFormatting(Formatting.YELLOW, Formatting.BOLD);
+        public Component getDescriptionText() {
+            UnaryOperator<Style> style = s -> s.applyFormats(ChatFormatting.YELLOW, ChatFormatting.BOLD);
             return switch (this) {
-                case Enable -> Text.translatable("options.cmmce.filtering_mode.template",
-                        Text.translatable("options.cmmce.filtering_mode.enabled").styled(style),
-                        Text.translatable("options.cmmce.filtering_mode.enabled.description"));
-                case BlackList -> Text.translatable("options.cmmce.filtering_mode.template",
-                        Text.translatable("options.cmmce.filtering_mode.black_list").styled(style),
-                        Text.translatable("options.cmmce.filtering_mode.black_list.description"));
-                case WhiteList -> Text.translatable("options.cmmce.filtering_mode.template",
-                        Text.translatable("options.cmmce.filtering_mode.white_list").styled(style),
-                        Text.translatable("options.cmmce.filtering_mode.white_list.description"));
-                case Disable -> Text.translatable("options.cmmce.filtering_mode.template",
-                        Text.translatable("options.cmmce.filtering_mode.disabled").styled(style),
-                        Text.translatable("options.cmmce.filtering_mode.disabled.description"));
+                case Enable -> Component.translatable("options.cmmce.filtering_mode.template",
+                        Component.translatable("options.cmmce.filtering_mode.enabled").withStyle(style),
+                        Component.translatable("options.cmmce.filtering_mode.enabled.description"));
+                case BlackList -> Component.translatable("options.cmmce.filtering_mode.template",
+                        Component.translatable("options.cmmce.filtering_mode.black_list").withStyle(style),
+                        Component.translatable("options.cmmce.filtering_mode.black_list.description"));
+                case WhiteList -> Component.translatable("options.cmmce.filtering_mode.template",
+                        Component.translatable("options.cmmce.filtering_mode.white_list").withStyle(style),
+                        Component.translatable("options.cmmce.filtering_mode.white_list.description"));
+                case Disable -> Component.translatable("options.cmmce.filtering_mode.template",
+                        Component.translatable("options.cmmce.filtering_mode.disabled").withStyle(style),
+                        Component.translatable("options.cmmce.filtering_mode.disabled.description"));
             };
         }
     }
@@ -172,12 +172,12 @@ public class CMMCEConfig {
 
         @Override
         public EntityType<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return EntityType.get(json.getAsString()).orElse(null);
+            return EntityType.byString(json.getAsString()).orElse(null);
         }
 
         @Override
         public JsonElement serialize(EntityType<?> src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive((EntityType.getId(src).toString()));
+            return new JsonPrimitive((EntityType.getKey(src).toString()));
         }
     }
 }

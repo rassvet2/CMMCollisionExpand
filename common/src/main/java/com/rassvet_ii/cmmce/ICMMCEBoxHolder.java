@@ -1,8 +1,8 @@
 package com.rassvet_ii.cmmce;
 
-import net.minecraft.util.math.Box;
+import net.minecraft.world.phys.AABB;
 
 public interface ICMMCEBoxHolder {
-    void cmmce$setEncompassBox(Box encompassBox);
-    Box cmmce$getEncompassBox();
+    void cmmce$setEncompassBox(AABB encompassBox);
+    AABB cmmce$getEncompassBox();
 }
