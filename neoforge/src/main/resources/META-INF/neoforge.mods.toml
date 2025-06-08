@@ -4,40 +4,40 @@ loaderVersion = "[4,)"
 license = "MIT"
 
 [[mods]]
-modId = "cmmce"
-version = "${version}"
-displayName = "CMM Collision Expand"
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
 authors = "rassvet_ii"
 description = '''
-Increase collision box size to match the CMMRP models.
+${mod_description}
 '''
 logoFile = "assets/cmmce/icon.png"
 
-[[dependencies.cmmce]]
+[["dependencies.${cmmce}"]]
 modId = "neoforge"
 type = "required"
 versionRange = "[21.5,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.cmmce]]
+[["dependencies.${cmmce}"]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.5,)"
+versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.cmmce]]
+[["dependencies.${cmmce}"]]
 modId = "architectury"
 type = "required"
-versionRange = "[16.1.4,)"
+versionRange = "[${architectury_api_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.cmmce]]
+[["dependencies.${cmmce}"]]
 modId = "yet_another_config_lib_v3"
 mandatory = false
-versionRange = "[3.6.6,)"
+versionRange = "[${yacL_version_id},)"
 ordering = "NONE"
 side = "CLIENT"
 

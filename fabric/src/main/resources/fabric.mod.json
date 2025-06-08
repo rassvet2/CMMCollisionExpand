@@ -1,9 +1,9 @@
 {
     "schemaVersion": 1,
-    "id": "cmmce",
-    "version": "${version}",
-    "name": "CMM Collision Expand",
-    "description": "Increase collision box size to match the CMMRP models.",
+    "id": "${mod_id}",
+    "version": "${mod_version}",
+    "name": "${mod_name}",
+    "description": "${mod_description}",
     "authors": [
         "rassvet_ii"
     ],
@@ -26,13 +26,13 @@
         "cmmce.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.16.14",
-        "minecraft": "~1.21.5",
+        "fabricloader": ">=${fabric_loader_version}",
+        "minecraft": "~${minecraft_version}",
         "java": ">=21",
-        "architectury": ">=16.1.4"
+        "architectury": ">=${architectury_api_version}"
     },
     "recommends":  {
-        "yet_another_config_lib_v3": ">=3.6.6",
-        "modmenu": ">=14.0.0-rc.2"
+        "yet_another_config_lib_v3": ">=${modmenu_version}",
+        "modmenu": ">=${yacl_version}"
     }
 }
