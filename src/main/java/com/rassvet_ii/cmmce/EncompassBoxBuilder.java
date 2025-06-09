@@ -12,13 +12,21 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
+//? if < 1.21.5 {
+/*import com.rassvet_ii.cmmce.mixin.IRenderStateShard;
+import net.minecraft.world.phys.Vec3;
+*///?}
 
 import java.util.*;
 
 public class EncompassBoxBuilder implements MultiBufferSource {
     private final MultiBufferSource source;
     private final Map<RenderType, VertexConsumer> layers = new Object2ObjectOpenHashMap<>();
+    //? if >= 1.21.5 {
     private final AABB.Builder builder = new AABB.Builder();
+    //?} else {
+    /*private final AABBBuilder builder = new AABBBuilder();
+    *///?}
     private final Vector3f buf = new Vector3f();
     private boolean validVertex = false;
 
@@ -35,7 +43,13 @@ public class EncompassBoxBuilder implements MultiBufferSource {
 
 //    private static final Set<ResourceLocation> dejavu = Sets.newConcurrentHashSet();
     private boolean isEntityBody(RenderType layer) {
-        if (!layer.getName().startsWith("entity") || layer.getName().equals("entity_shadow")) {
+        //? if >= 1.21.5 {
+        String layerName = layer.getName();
+        //?} else {
+        /*String layerName = ((IRenderStateShard) layer).getName();
+        *///?}
+
+        if (!layerName.startsWith("entity") || layerName.equals("entity_shadow")) {
             return false;
         }
 
@@ -126,4 +140,29 @@ public class EncompassBoxBuilder implements MultiBufferSource {
             return this;
         }
     }
+
+    //? if <1.21.5 {
+    /*private static class AABBBuilder {
+        private double minX = Float.POSITIVE_INFINITY;
+        private double minY = Float.POSITIVE_INFINITY;
+        private double minZ = Float.POSITIVE_INFINITY;
+        private double maxX = Float.NEGATIVE_INFINITY;
+        private double maxY = Float.NEGATIVE_INFINITY;
+        private double maxZ = Float.NEGATIVE_INFINITY;
+
+        public AABBBuilder include(Vector3f pos) {
+            minX = Math.min(minX, pos.x);
+            minY = Math.min(minY, pos.y);
+            minZ = Math.min(minZ, pos.z);
+            maxX = Math.max(maxX, pos.x);
+            maxY = Math.max(maxY, pos.y);
+            maxZ = Math.max(maxZ, pos.z);
+            return this;
+        }
+
+        public AABB build() {
+            return new AABB(minX, minY, minZ, maxX, maxY, maxZ);
+        }
+    }
+    *///?}
 }

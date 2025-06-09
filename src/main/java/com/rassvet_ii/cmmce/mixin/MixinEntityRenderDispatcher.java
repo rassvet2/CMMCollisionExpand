@@ -21,7 +21,11 @@ public class MixinEntityRenderDispatcher {
     private Entity cmmce$entity = null;
 
     @ModifyVariable(
+            //? if >=1.21.3 {
             method = "render(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/renderer/entity/EntityRenderer;)V",
+            //?} else {
+            /*method = "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            *///?}
             at = @At("HEAD"),
             argsOnly = true)
     private Entity captureEntity(Entity entity) {
@@ -31,7 +35,11 @@ public class MixinEntityRenderDispatcher {
     }
 
     @ModifyVariable(
+            //? if >=1.21.3 {
             method = "render(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/renderer/entity/EntityRenderer;)V",
+            //?} else {
+            /*method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            *///?}
             at = @At(value = "HEAD"),
             argsOnly = true)
     private MultiBufferSource beforeEntityRenderer(MultiBufferSource vertexConsumers) {
@@ -40,7 +48,11 @@ public class MixinEntityRenderDispatcher {
 
 
     @ModifyVariable(
+            //? if >=1.21.3 {
             method = "render(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/renderer/entity/EntityRenderer;)V",
+            //?} else {
+            /*method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            *///?}
             at = @At(value = "TAIL"),
             argsOnly = true)
     private MultiBufferSource afterEntityRenderer(

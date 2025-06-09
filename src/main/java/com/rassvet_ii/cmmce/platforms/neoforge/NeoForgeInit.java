@@ -8,24 +8,24 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 //? if <1.21 {
-import net.neoforged.neoforge.client.ConfigScreenHandler;
-//?} else {
-/^import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-^///?}
+/^import net.neoforged.neoforge.client.ConfigScreenHandler;
+^///?} else {
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+//?}
 @Mod("template")
 public class NeoForgeInit implements ModPlatform {
 	public NeoForgeInit() {
 		CMMCEInit.init(this);
         ModLoadingContext.get().registerExtensionPoint(
                 //? if <1.21 {
-                ConfigScreenHandler.ConfigScreenFactory.class,
+                /^ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory(
                         ((client, parent) -> CMMCEConfigScreen.build(parent))
                 )
-                //?} else {
-                /^IConfigScreenFactory.class,
+                ^///?} else {
+                IConfigScreenFactory.class,
                 () -> (client, parent) -> CMMCEConfigScreen.build(parent)
-                ^///?}
+                //?}
         );
 	}
 

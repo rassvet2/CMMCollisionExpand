@@ -5,10 +5,11 @@
   "mixins": [
   ],
   "client": [
-    "MixinEntity",
     "IMultiPhase",
     "IMultiPhaseParameters",
+    "IRenderStateShard",
     "ITexture",
+    "MixinEntity",
     "MixinEntityRenderDispatcher",
     "MixinEntityRenderer",
     "MixinProjectileUtil"

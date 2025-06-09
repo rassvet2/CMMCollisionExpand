@@ -1,5 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
+import net.fabricmc.loom.util.ModPlatform
 import java.util.*
 
 plugins {
@@ -50,9 +51,10 @@ dependencies {
     })
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
-    modImplementation("dev.architectury:architectury:${mod.dep("architectury_api")}")
+//    modImplementation("dev.architectury:architectury:${mod.dep("architectury_api")}")
     modImplementation("dev.architectury:architectury-$loader:${mod.dep("architectury_api")}")
     // fixme ^^^^ architectury-api throws AssertionError when architectury-api isn't manually installed
+    // commenting out doesn't work on 1.21.4+ (at least)
     modImplementation("dev.isxander:yet-another-config-lib:${mod.dep("yacl")}+$minecraft-$loader")
 
     if (loader == "fabric") {
@@ -225,4 +227,12 @@ tasks.processResources {
 tasks.build {
     group = "versioned"
     description = "Must run through 'chiseledBuild'"
+}
+
+stonecutter {
+    constants {
+        put("fabric", loom.platform.get() == ModPlatform.FABRIC)
+        put("forge", loom.platform.get() == ModPlatform.FORGE)
+        put("neoforge", loom.platform.get() == ModPlatform.NEOFORGE)
+    }
 }

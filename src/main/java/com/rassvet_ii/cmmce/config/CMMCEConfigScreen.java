@@ -122,13 +122,25 @@ public class CMMCEConfigScreen {
                 Component.empty(),
                 Component.translatable("options.cmmce.about.credits").copy().withStyle(s -> s.withBold(true)),
                 Component.empty(),
-                Component.translatable("options.cmmce.about.cmmrp").copy().withStyle(STRONG).withStyle(url(Constants.CMMRP_LINK)),
-                Component.literal(Constants.CMMRP_LINK.toString()).copy().withStyle(WEAK).withStyle(url(Constants.CMMRP_LINK)),
+                buildCredit(
+                        Component.translatable("options.cmmce.about.cmmrp"),
+                        Constants.CMMRP_LINK),
                 Component.empty(),
-                Component.translatable("options.cmmce.about.yacl").copy().withStyle(STRONG).withStyle(url(Constants.YACL_LINK)),
-                Component.literal(Constants.YACL_LINK.toString()).copy().withStyle(WEAK).withStyle(url(Constants.YACL_LINK)),
-                Component.empty()
-        );
+                buildCredit(
+                        Component.translatable("options.cmmce.about.yacl"),
+                        Constants.YACL_LINK),
+                Component.empty(),
+                buildCredit(
+                        Component.translatable("options.cmmce.about.architectury"),
+                        Constants.ARCH_LINK),
+                Component.empty(),
+                buildCredit(
+                        Component.translatable("options.cmmce.about.stonecutter"),
+                        Constants.SC_LINK),
+                Component.empty(),
+                buildCredit(
+                        Component.translatable("options.cmmce.about.stonecutter_template"),
+                        Constants.SCT_LINK));
 
         return OptionGroup.createBuilder()
                 .name(Component.translatable("options.cmmce.about"))
@@ -139,6 +151,17 @@ public class CMMCEConfigScreen {
                         .binding(Binding.immutable(ComponentUtils.formatList(lines, Component.literal("\n"))))
                         .build())
                 .build();
+    }
+
+    private static Component buildCredit(
+            Component title,
+//            Component description,
+            URI link
+    ) {
+        return ComponentUtils.formatList(List.of(
+                title.copy().withStyle(STRONG).withStyle(url(link)),
+                Component.literal(link.toString()).copy().withStyle(WEAK).withStyle(url(link))
+                ), Component.literal("\n"));
     }
 
     private static class Holder<T> {
@@ -163,6 +186,12 @@ public class CMMCEConfigScreen {
     private static final UnaryOperator<Style> WEAK = s -> s.applyFormats(ChatFormatting.GRAY);
 
     private static UnaryOperator<Style> url(URI url) {
-        return s -> s.applyFormats(ChatFormatting.UNDERLINE).withClickEvent(new ClickEvent.OpenUrl(url));
+        return s -> s.applyFormats(ChatFormatting.UNDERLINE)
+                //? if >= 1.21.5 {
+                .withClickEvent(new ClickEvent.OpenUrl(url));
+        //?} else {
+        /*.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url.toString()));
+         *///?}
+
     }
 }

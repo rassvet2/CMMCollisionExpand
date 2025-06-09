@@ -21,11 +21,13 @@ stonecutter {
     kotlinController = true
     shared {
         fun mc(loader: String, vararg versions: String) {
-            for (version in versions) vers("$version-$loader", version)
+            for (version in versions)
+                if (!version.startsWith("1.20"))
+                    vers("$version-$loader", version)
         }
         // i would recommend to use neoforge for mc > 1.20.1, i haven't tested cmmce for forge on versions higher than that
-        mc("fabric","1.20.1","1.20.4", "1.21.1", "1.21.3", "1.21.4", "1.21.5")
-        mc("forge","1.20.1")
+        mc("fabric", "1.20.1", "1.20.4", "1.21.1", "1.21.3", "1.21.4", "1.21.5")
+        mc("forge", "1.20.1")
         // WARNING: neoforge uses mods.toml instead of neoforge.mods.toml for versions 1.20.4 (?) and earlier
         mc("neoforge", "1.20.4", "1.21.1", "1.21.3", "1.21.4", "1.21.5")
 

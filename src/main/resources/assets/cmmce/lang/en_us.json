@@ -29,6 +29,9 @@
   "options.cmmce.about.credits": "Credits",
   "options.cmmce.about.cmmrp": "Cute Mob Models Resource Pack",
   "options.cmmce.about.yacl": "YetAnotherConfigLib",
+  "options.cmmce.about.architectury": "Architectury",
+  "options.cmmce.about.stonecutter": "Stonecutter",
+  "options.cmmce.about.stonecutter_template": "Stonecutter-Arch-Template",
 
   "modmenu.descriptionTranslation.cmmce": "Increase the size of the collision box used on interactions such as right-click and attack so that the box size visually matches to the CMMRP models.",
   "modmenu.summaryTranslation.cmmce": "Increase collision box size to match the CMMRP models."

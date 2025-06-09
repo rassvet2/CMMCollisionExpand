@@ -4,13 +4,19 @@ import com.rassvet_ii.cmmce.config.CMMCEConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.phys.AABB;
-
+//? if >=1.21.5 {
+import net.minecraft.world.entity.EntitySelector;
+//?}
 
 public class BBExpander {
     public static boolean shouldExpand(Entity entity) {
+        //? if >=1.21.5 {
         if (!EntitySelector.CAN_BE_PICKED.test(entity)) return false;
+        //?} else {
+        /*if (entity.isSpectator() || !entity.isPickable()) return false;
+        *///?}
+
 
         var player = Minecraft.getInstance().player;
         if (player == null) return false;

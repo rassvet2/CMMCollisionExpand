@@ -29,6 +29,9 @@
   "options.cmmce.about.credits": "クレジット",
   "options.cmmce.about.cmmrp": "Cute Mob Models Resource Pack",
   "options.cmmce.about.yacl": "YetAnotherConfigLib",
+  "options.cmmce.about.architectury": "Architectury",
+  "options.cmmce.about.stonecutter": "Stonecutter",
+  "options.cmmce.about.stonecutter_template": "Stonecutter-Arch-Template",
 
   "modmenu.descriptionTranslation.cmmce": "CMMRPのモデルが当たり判定と視覚的に一致するように、右クリック時や攻撃時に使用される判定のサイズを拡大します。",
   "modmenu.summaryTranslation.cmmce": "CMMRPのモデルと一致するように当たり判定のサイズを拡大します。"
