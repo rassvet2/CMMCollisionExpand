@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "${description}",
+  "authors": [
+    "rassvet_ii"
+  ],
+  "contact": {
+    "homepage": "https://github.com/rassvet2/CMMCollisionExpand",
+    "sources": "https://github.com/rassvet2/CMMCollisionExpand"
+  },
+  "license": "MIT",
+  "icon": "assets/cmmce/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "com.rassvet_ii.cmmce.platforms.fabric.FabricInit"
+    ],
+    "modmenu": [
+      "com.rassvet_ii.cmmce.platforms.fabric.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "cmmce-common.mixins.json",
+    "cmmce-fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader}",
+    "minecraft": "${minecraft}",
+    "java": ">=21",
+    "architectury": ">=${architectury}"
+  },
+  "recommends":  {
+    "yet_another_config_lib_v3": ">=${modmenu}",
+    "modmenu": ">=${yacl}"
+  }
+}
