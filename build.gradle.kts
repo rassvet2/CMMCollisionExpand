@@ -1,77 +1,228 @@
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
+@file:Suppress("UnstableApiUsage")
+
+import java.util.*
 
 plugins {
-    java
-    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
-    id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("com.gradleup.shadow") version "8.3.6" apply false
+    id("dev.architectury.loom")
+    id("architectury-plugin")
+    id("me.modmuss50.mod-publish-plugin")
+    id("com.github.johnrengelman.shadow")
+}
+
+val minecraft = stonecutter.current.version
+val loader = loom.platform.get().name.lowercase()
+
+version = "${mod.version}+$minecraft"
+group = mod.group
+base {
+    archivesName = "${mod.id}-$loader"
 }
 
 architectury {
-    minecraft = property("minecraft_version") as String
+    if (stonecutter.current.isActive) platformSetupLoomIde()
+
+    common(stonecutter.tree.branches.mapNotNull {
+        if (stonecutter.current.project !in it) null
+        else it.project.prop("loom.platform")
+    })
 }
 
-allprojects {
-    group = property("maven_group")!!
-    version = property("mod_version")!!
+repositories {
+    maven("https://maven.neoforged.net/releases")
+
+    // modmenu
+    maven("https://maven.terraformersmc.com")
+    maven("https://maven.nucleoid.xyz")
+
+    // yacl & parchment
+    maven("https://maven.isxander.dev/releases")
+
+    // kotlinforforge
+    maven("https://thedarkcolour.github.io/KotlinForForge")
 }
 
-subprojects {
-    apply(plugin = "dev.architectury.loom")
-    apply(plugin = "architectury-plugin")
-    apply(plugin = "maven-publish")
+dependencies {
+    minecraft("com.mojang:minecraft:$minecraft")
 
-    // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
-    base.archivesName = "${property("archives_name")}-${property("name")}"
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-$minecraft:${mod.dep("parchment")}@zip")
+    })
 
-    repositories {
-        maven("https://maven.isxander.dev/releases") {
-            name = "Xander Maven"
-        }
+    // Architectury API. This is optional, and you can comment it out if you don't need it.
+    modImplementation("dev.architectury:architectury:${mod.dep("architectury_api")}")
+    modImplementation("dev.architectury:architectury-$loader:${mod.dep("architectury_api")}")
+    // fixme ^^^^ architectury-api throws AssertionError when architectury-api isn't manually installed
+    modImplementation("dev.isxander:yet-another-config-lib:${mod.dep("yacl")}+$minecraft-$loader")
 
-        maven("https://maven.parchmentmc.org") {
-            name = "ParchmentMC"
-        }
+    if (loader == "fabric") {
+        modImplementation("net.fabricmc:fabric-loader:${mod.dep("fabric_loader")}")
+        modImplementation("com.terraformersmc:modmenu:${mod.dep("modmenu_version")}")
+
+        // some features (like automatic resource loading from non vanilla namespaces) work only with fabric API installed
+        // for example translations from assets/modid/lang/en_us.json won't be working, same stuff with textures
+        // but we keep runtime only to not accidentally depend on fabric's api, because it doesn't exist in neo/forge
+        modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${mod.dep("fabric_version")}")
     }
 
-    val loom = project.extensions.getByName("loom") as LoomGradleExtensionAPI
+    if (loader == "forge") {
+        "forge"("net.minecraftforge:forge:${minecraft}-${mod.dep("forge_loader")}")
 
-    dependencies {
-        "minecraft"("net.minecraft:minecraft:${property("minecraft_version")}")
-        @Suppress("UnstableApiUsage")
-        "mappings"(loom.layered {
-            officialMojangMappings()
-            @Suppress("UnstableApiUsage")
-            parchment("org.parchmentmc.data:parchment-${property("parchment_version")}@zip")
-        })
+        implementation("io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}")
+        include("io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}")
     }
 
-    java {
-        withSourcesJar()
-
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    if (loader == "neoforge") {
+        "neoForge"("net.neoforged:neoforge:${mod.dep("neoforge_loader")}")
+//        implementation("thedarkcolour:kotlinforforge-neoforge:5.6.0")
     }
+}
 
-    tasks.withType<JavaCompile>().configureEach {
-        options.release = 21
-    }
+loom {
+    accessWidenerPath = rootProject.file("src/main/resources/cmmce.accesswidener")
 
-    // Configure Maven publishing.
-    configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                artifactId = base.archivesName.get()
-                from(components["java"])
-            }
-        }
-
-        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-        repositories {
-            // Add repositories to publish to here.
-            // Notice: This block does NOT have the same function as the block in the top level.
-            // The repositories here will be used for publishing your artifact, not for
-            // retrieving dependencies.
+    decompilers {
+        get("vineflower").apply { // Adds names to lambdas - useful for mixins
+            options.put("mark-corresponding-synthetics", "1")
         }
     }
+
+    if (loader == "forge") {
+        forge.mixinConfigs(
+            "cmmce-common.mixins.json",
+            "cmmce-forge.mixins.json",
+        )
+    }
+}
+
+
+val localProperties = Properties().also {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        it.load(localPropertiesFile.inputStream())
+    }
+}
+
+publishMods {
+    val modrinthToken = localProperties.getProperty("publish.modrinthToken", "")
+    val curseforgeToken = localProperties.getProperty("publish.curseforgeToken", "")
+
+    file = project.tasks.remapJar.get().archiveFile
+    dryRun = modrinthToken == null || curseforgeToken == null
+
+    displayName = "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${property("mod.mc_title")}-${mod.version}"
+    version = mod.version
+    changelog = rootProject.file("CHANGELOG.md").readText()
+    type = BETA
+
+    modLoaders.add(loader)
+
+    val targets = property("mod.mc_targets").toString().split(' ')
+    modrinth {
+        projectId = property("publish.modrinth").toString()
+        accessToken = modrinthToken
+        targets.forEach(minecraftVersions::add)
+        if (loader == "fabric") {
+            requires("fabric-api")
+            optional("modmenu")
+        }
+    }
+
+    curseforge {
+        projectId = property("publish.curseforge").toString()
+        accessToken = curseforgeToken.toString()
+        targets.forEach(minecraftVersions::add)
+        if (loader == "fabric") {
+            requires("fabric-api")
+            optional("modmenu")
+        }
+    }
+}
+
+java {
+    withSourcesJar()
+    if (stonecutter.eval(minecraft, ">=1.20.5")) {
+        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_21
+    } else {
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+val shadowBundle: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
+
+tasks.shadowJar {
+    configurations = listOf(shadowBundle)
+    archiveClassifier = "dev-shadow"
+}
+
+tasks.remapJar {
+    injectAccessWidener = true
+    inputFile = tasks.shadowJar.get().archiveFile
+    archiveClassifier = null
+    dependsOn(tasks.shadowJar)
+}
+
+tasks.jar {
+    archiveClassifier = "dev"
+}
+
+val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
+    group = "versioned"
+    description = "Must run through 'chiseledBuild'"
+    from(tasks.remapJar.get().archiveFile, tasks.remapSourcesJar.get().archiveFile)
+    into(rootProject.layout.buildDirectory.file("libs/${mod.version}/$loader"))
+    dependsOn("build")
+}
+
+if (stonecutter.current.isActive) {
+    rootProject.tasks.register("buildActive") {
+        group = "project"
+        dependsOn(buildAndCollect)
+    }
+
+    rootProject.tasks.register("runActive") {
+        group = "project"
+        dependsOn(tasks.named("runClient"))
+    }
+}
+
+tasks.processResources {
+    val commonProperties = arrayOf(
+        "id" to mod.id,
+        "name" to mod.name,
+        "version" to mod.version,
+        "description" to mod.prop("description"),
+
+        "architectury" to mod.dep("architectury_api"),
+        "yacl" to mod.dep("yacl"),
+    )
+    properties(
+        listOf("fabric.mod.json"),
+        *commonProperties,
+        "minecraft" to mod.prop("mc_dep_fabric"),
+        "fabric_loader" to mod.dep("fabric_loader"),
+        "modmenu" to mod.dep("modmenu_version")
+    )
+    properties(
+        listOf("META-INF/mods.toml", "pack.mcmeta"),
+        *commonProperties,
+        "minecraft" to mod.prop("mc_dep_forgelike"),
+        "forge" to mod.dep("forge_loader")
+    )
+    properties(
+        listOf("META-INF/neoforge.mods.toml", "pack.mcmeta"),
+        *commonProperties,
+        "minecraft" to mod.prop("mc_dep_forgelike"),
+        "neoforge" to mod.dep("neoforge_loader")
+    )
+}
+
+tasks.build {
+    group = "versioned"
+    description = "Must run through 'chiseledBuild'"
 }

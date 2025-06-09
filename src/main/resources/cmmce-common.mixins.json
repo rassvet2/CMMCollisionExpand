@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.rassvet_ii.cmmce.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "MixinEntity",
+    "IMultiPhase",
+    "IMultiPhaseParameters",
+    "ITexture",
+    "MixinEntityRenderDispatcher",
+    "MixinEntityRenderer",
+    "MixinProjectileUtil"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
