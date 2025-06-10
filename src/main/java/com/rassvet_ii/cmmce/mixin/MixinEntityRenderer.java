@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //? if >= 1.21.3 {
 import net.minecraft.client.renderer.ShapeRenderer;
- //?} else {
+//?} else {
 /^import net.minecraft.client.renderer.LevelRenderer;
 ^///?}
 *///?}
@@ -55,18 +55,23 @@ public class MixinEntityRenderer {
         }
     }
     //?} else {
-    /*@Inject(method = "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;renderHitbox(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/entity/Entity;FFFF)V",
-        at = @At(value = "TAIL"))
+    /*@Inject(method = "renderHitbox",
+            at = @At(value = "TAIL"))
     private static void renderHitbox(
             PoseStack poseStack, VertexConsumer buffer, Entity entity,
-            float red, float green, float blue, float alpha, CallbackInfo ci
+            //? if > 1.20.1 {
+            float red, float green, float blue, float alpha,
+            //?} else {
+            /^float partialTicks,
+            ^///?}
+            CallbackInfo ci
     ) {
         if (CMMCEConfig.HANDLER.instance().renderDebugBox() && BBExpander.shouldExpand(entity)) {
             var box = BBExpander.expand(entity, entity.getBoundingBox())
                     .move(-entity.getX(), -entity.getY(), -entity.getZ());
             //? if >= 1.21.3 {
             ShapeRenderer.renderLineBox(poseStack, buffer, box, 0f, 1f, 1f, 1f);
-             //?} else {
+            //?} else {
             /^LevelRenderer.renderLineBox(poseStack, buffer, box, 0f, 1f, 1f, 1f);
             ^///?}
         }

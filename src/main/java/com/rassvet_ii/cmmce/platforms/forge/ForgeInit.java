@@ -3,12 +3,13 @@ package com.rassvet_ii.cmmce.platforms.forge;
 import com.rassvet_ii.cmmce.platforms.ModPlatform;
 //? if forge {
 /*import com.rassvet_ii.cmmce.CMMCEInit;
+import com.rassvet_ii.cmmce.Constants;
 import com.rassvet_ii.cmmce.config.CMMCEConfigScreen;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod("template")
+@Mod(Constants.MOD_ID)
 public class ForgeInit implements ModPlatform {
     public ForgeInit() {
         CMMCEInit.init(this);

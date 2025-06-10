@@ -3,6 +3,7 @@ package com.rassvet_ii.cmmce.platforms.neoforge;
 import com.rassvet_ii.cmmce.platforms.ModPlatform;
 //? if neoforge {
 /*import com.rassvet_ii.cmmce.CMMCEInit;
+import com.rassvet_ii.cmmce.Constants;
 import com.rassvet_ii.cmmce.config.CMMCEConfigScreen;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -12,7 +13,7 @@ import net.neoforged.fml.common.Mod;
 ^///?} else {
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 //?}
-@Mod("template")
+@Mod(Constants.MOD_ID)
 public class NeoForgeInit implements ModPlatform {
 	public NeoForgeInit() {
 		CMMCEInit.init(this);

@@ -19,7 +19,11 @@ import java.util.function.UnaryOperator;
 
 public class CMMCEConfig {
     public static final ConfigClassHandler<CMMCEConfig> HANDLER = ConfigClassHandler.createBuilder(CMMCEConfig.class)
+            //? if > 1.20.4 {
             .id(ResourceLocation.parse("cmmce:config"))
+            //?} else {
+            /*.id(ResourceLocation.tryParse("cmmce:config"))
+            *///?}
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(Platform.getConfigFolder().resolve("cmmce.json5"))
                     .setJson5(true)
@@ -36,12 +40,14 @@ public class CMMCEConfig {
     @SerialEntry
     public List<EntityType<?>> filterEntities = List.of();
     public static final List<EntityType<?>> PRESET = List.of(
-            EntityType.ARMADILLO,
+            //? if >= 23w51a
+            /*EntityType.ARMADILLO,*/
             EntityType.AXOLOTL,
 //            EntityType.BAT,
             EntityType.BEE, // maybe
             EntityType.BLAZE,
-            EntityType.BREEZE,
+            //? if >= 23w45a
+            /*EntityType.BREEZE,*/
             EntityType.CAT,
             EntityType.CAVE_SPIDER,
             EntityType.CHICKEN,

@@ -51,11 +51,12 @@ dependencies {
     })
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
-//    modImplementation("dev.architectury:architectury:${mod.dep("architectury_api")}")
     modImplementation("dev.architectury:architectury-$loader:${mod.dep("architectury_api")}")
-    // fixme ^^^^ architectury-api throws AssertionError when architectury-api isn't manually installed
-    // commenting out doesn't work on 1.21.4+ (at least)
-    modImplementation("dev.isxander:yet-another-config-lib:${mod.dep("yacl")}+$minecraft-$loader")
+    modImplementation("dev.isxander:yet-another-config-lib:${mod.dep("yacl")}+$minecraft-$loader") {
+//        exclude(group = "net.neoforged.fancymodloader", module = "loader")
+        // fixme ^^^ to fix KotlinForForge #106, temporary exclude fml manually
+        // https://github.com/thedarkcolour/KotlinForForge/issues/106
+    }
 
     if (loader == "fabric") {
         modImplementation("net.fabricmc:fabric-loader:${mod.dep("fabric_loader")}")
@@ -69,14 +70,22 @@ dependencies {
 
     if (loader == "forge") {
         "forge"("net.minecraftforge:forge:${minecraft}-${mod.dep("forge_loader")}")
+        annotationProcessor("io.github.llamalad7:mixinextras-common:${mod.dep("mixin_extras")}")
 
-        implementation("io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}")
-        include("io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}")
+        compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mod.dep("mixin_extras")}").toString())
+        implementation(include("io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}").toString())
+//        implementation("io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}")
+//        include("io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}")
     }
 
     if (loader == "neoforge") {
         "neoForge"("net.neoforged:neoforge:${mod.dep("neoforge_loader")}")
+
 //        implementation("thedarkcolour:kotlinforforge-neoforge:5.6.0")
+//        implementation("org.quiltmc.parsers:gson:0.2.1")
+        // fixme ^^^ to fix KotlinForForge #106, temporary include yacl deps
+        // https://github.com/thedarkcolour/KotlinForForge/issues/106
+        // https://github.com/isXander/YetAnotherConfigLib/blob/multiversion/dev/build.gradle.kts
     }
 }
 

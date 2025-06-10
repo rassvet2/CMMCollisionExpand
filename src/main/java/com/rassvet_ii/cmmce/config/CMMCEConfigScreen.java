@@ -27,7 +27,6 @@ public class CMMCEConfigScreen {
                 .title(Component.literal("CMM Collision Expand"))
                 .category(ConfigCategory.createBuilder()
                         .name(Component.translatable("options.cmmce.general"))
-                        .tooltip(Component.literal("General Settings"))
                         .group(buildFilterSettings(defaults, config, holders))
                         .group(holders.filterList.set(buildFilterList(defaults, config)))
                         .group(buildDebugSettings(defaults, config))

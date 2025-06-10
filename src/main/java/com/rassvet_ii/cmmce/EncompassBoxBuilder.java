@@ -102,6 +102,7 @@ public class EncompassBoxBuilder implements MultiBufferSource {
             this.builder = builder;
         }
 
+        //? if > 1.20.4 {
         @Override
         public @NotNull VertexConsumer addVertex(float x, float y, float z) {
             source.addVertex(x, y, z);
@@ -139,6 +140,62 @@ public class EncompassBoxBuilder implements MultiBufferSource {
             source.setNormal(f, g, h);
             return this;
         }
+
+        //?} else {
+
+        /*@Override
+        public @NotNull VertexConsumer vertex(double x, double y, double z) {
+            source.vertex(x, y, z);
+            builder.vertex((float) x, (float) y, (float) z);
+            return this;
+        }
+
+        @Override
+        public @NotNull VertexConsumer color(int red, int green, int blue, int alpha) {
+            source.color(red, green, blue, alpha);
+            if (alpha != 255) builder.invalidate();
+            return this;
+        }
+
+        @Override
+        public @NotNull VertexConsumer uv(float f, float g) {
+            source.uv(f, g);
+            return this;
+        }
+
+        @Override
+        public @NotNull VertexConsumer overlayCoords(int i, int j) {
+            source.overlayCoords(i, j);
+            return this;
+        }
+
+        @Override
+        public @NotNull VertexConsumer uv2(int i, int j) {
+            source.uv2(i, j);
+            return this;
+        }
+
+        @Override
+        public @NotNull VertexConsumer normal(float f, float g, float h) {
+            source.normal(f, g, h);
+            return this;
+        }
+
+        @Override
+        public void endVertex() {
+            source.endVertex();
+        }
+
+        @Override
+        public void defaultColor(int defaultR, int defaultG, int defaultB, int defaultA) {
+            source.defaultColor(defaultR, defaultG, defaultB, defaultA);
+        }
+
+        @Override
+        public void unsetDefaultColor() {
+            source.unsetDefaultColor();
+        }
+        *///?}
     }
 
     //? if <1.21.5 {

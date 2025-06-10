@@ -17,10 +17,18 @@ public class BBExpander {
         /*if (entity.isSpectator() || !entity.isPickable()) return false;
         *///?}
 
-
         var player = Minecraft.getInstance().player;
         if (player == null) return false;
-        if (player.position().distanceToSqr(entity.position()) > Mth.square(player.entityInteractionRange() + 1)) return false;
+
+        //? if > 1.20.4 {
+        double range = player.entityInteractionRange();
+        //?} else {
+        /*var gameMode = Minecraft.getInstance().gameMode;
+        double range = gameMode == null ? 6.0
+                : gameMode.hasFarPickRange() ? 6.0
+                : gameMode.getPickRange();
+        *///?}
+        if (player.position().distanceToSqr(entity.position()) > Mth.square(range + 1)) return false;
 
         var containedInFilter = CMMCEConfig.HANDLER.instance().getFilterEntities().contains(entity.getType());
         return CMMCEConfig.HANDLER.instance().getFilterMode().shouldExpand(containedInFilter);

@@ -22,8 +22,7 @@ stonecutter {
     shared {
         fun mc(loader: String, vararg versions: String) {
             for (version in versions)
-                if (!version.startsWith("1.20"))
-                    vers("$version-$loader", version)
+                vers("$version-$loader", version)
         }
         // i would recommend to use neoforge for mc > 1.20.1, i haven't tested cmmce for forge on versions higher than that
         mc("fabric", "1.20.1", "1.20.4", "1.21.1", "1.21.3", "1.21.4", "1.21.5")
